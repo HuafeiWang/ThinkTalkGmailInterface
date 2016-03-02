@@ -2,7 +2,7 @@
 	"name": "thingengine-device-gmail",
 	"version": "1.0.0",
 	"thingpedia-version": 0,
-	"description": "Gmail support",
+	"description": "Gmail Support",
 	"author": "Huafei Wang, Ye Yuan",
 	"contributors": [
 		{
