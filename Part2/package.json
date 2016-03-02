@@ -1,0 +1,15 @@
+{
+	"name": "thingengine-device-gmail",
+	"version": "1.0.0",
+	"thingpedia-version": 0,
+	"description": "Gmail support",
+	"author": "Huafei Wang, Ye Yuan",
+	"contributors": [
+		{
+			"name": "Huafei Wang, Ye Yuan",
+			"email": "huafei@stanford.edu, y0222@stanford.edu"
+		}
+	],
+	"main": "device.js",
+	"dependencies": {}
+}
