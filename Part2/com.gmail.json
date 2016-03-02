@@ -10,9 +10,9 @@
   "triggers": {
     "receive": {
       "args": [
-        "content",
         "from",
-        "title",
+        "content",
+        "messageid",
       ],
       "schema": [
         "String",
@@ -23,18 +23,14 @@
     }
   },
   "actions": {
-    "send": {
+    "trash": {
       "args": [
-        "content",
-        "to",
-        "title",
+        "messageid",
       ],
       "schema": [
         "String",
-        "String",
-        "String",
       ],
-      "doc": "send email to others"
+      "doc": "trash the specified email"
     }
   }
 }
