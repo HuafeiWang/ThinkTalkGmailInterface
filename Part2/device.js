@@ -1,5 +1,23 @@
 const Tp = require('thingpedia');
 
+// // need to be addaped for gmail
+// const CONSUMER_KEY = process.env['TWITTER_CONSUMER_KEY'] || 'VZRViA2T4qy7CBZjU5juPumZN';
+// // Twitter uses OAuth 1.0, so this needs to be here...
+// const CONSUMER_SECRET = process.env['TWITTER_CONSUMER_SECRET'] || rot13('hsTCqM6neIt3hqum6zvnDCIqQkUuyWtSjKBoqZFONvzVXfb7OJ');
+
+
+function makeGmailApi(engine, accessToken, accessTokenSecret) {
+    var origin = platform.getOrigin();
+    return new Gmail({
+        // consumerKey: CONSUMER_KEY,
+        // consumerSecret: CONSUMER_SECRET,
+        // callBackUrl: origin + '/devices/oauth2/callback/twitter-account', //need to be adapted
+        accessToken: accessToken,
+        // accessTokenSecret: accessTokenSecret
+    });
+}
+
+
 module.exports = new Tp.DeviceClass({
 	Name: 'Gmail Device',
 	Kinds: [], 
@@ -32,7 +50,14 @@ module.exports = new Tp.DeviceClass({
 
 		this.name = "Gmail %s".format(this.userId);
 		this.description = "This is a Gmail owned by %s".format(this.userName);
+		console.log('this: ', this);
+		console.log('this.state: ', this.state);
+		console.log('this.device: ', this.device);
 	},
+
+	// get auth() {// not sure if accessToken sits in device or state, or this??
+ //            return this.device.accessToken;
+ //        },
 
 	get userId() {
 		return this.state.userId;
@@ -51,11 +76,13 @@ module.exports = new Tp.DeviceClass({
 	},
 
 	checkAvailable: function() {
-		reutrn Tp.Availability.AVAILABLE;
+		return Tp.Availability.AVAILABLE;
 	},
 
 	queryInterface: function(iface) {
 		switch (iface) {
+			case 'gmail':
+            	return makeGmailApi(this.engine, this.state.accessToken);
 			case 'oauth2':
 				return this;
 			default:

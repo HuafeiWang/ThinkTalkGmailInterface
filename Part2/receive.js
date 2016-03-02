@@ -1,20 +1,42 @@
+var gapi = require('gapi');
+
 const Tp = require('thingpedia');
 
 module.exports = new Tp.ChannelClass({
-    Name: 'TwitterSinkChannel',
+    Name: 'GmailSinkChannel',
+    // Name: 'TwitterSinkChannel',
 
     _init: function(engine, device) {
         this.parent();
 
-        this._twitter = device.queryInterface('twitter');
+        this._gmail = device.queryInterface('gmail');
     },
 
-    sendEvent: function(event) {
-        console.log('Posting Twitter event', event);
-
-        var status = event[0];
-        this._twitter.postTweet({ status: status }, function(err) {
-            console.log('Tweeting failed: ' + err);
-        }, function() { });
+    receiveEvent: function listMessages(userId, /*query,*/ callback) {
+      var getPageOfMessages = function(request, result) {
+        request.execute(function(resp) {
+          result = result.concat(resp.messages);
+          var nextPageToken = resp.nextPageToken;
+          if (nextPageToken) {
+            request = gapi.client.gmail.users.messages.list({
+              'userId': userId,
+              'maxResults': 1,
+              // 'pageToken': nextPageToken,
+              // 'q': query
+            });
+            getPageOfMessages(request, result);
+          } else {
+            callback(result);
+          }
+        });
+      };
+      var initialRequest = gapi.client.gmail.users.messages.list({
+        'userId': userId,
+        'q': query
+      });
+      getPageOfMessages(initialRequest, []);
     },
 });
+
+
+
